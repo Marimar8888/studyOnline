@@ -1,0 +1,46 @@
+.blog-form-wrapper {
+    @include base-grid();
+    grid-template-columns: 1fr;
+    padding: 42px;
+
+    @include input-element();
+    input {
+        margin-bottom: 0px;
+    }
+
+    .two-column {
+        @include base-grid();
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .one-column {
+        @include base-grid();
+        grid-template-columns: 1fr;
+    }
+
+    .image-uploaders {
+        @include base-grid();
+        grid-template-columns: 200px;
+
+        .blog-manager-image-wrapper {
+            width: 200px;
+
+            img {
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+      }
+
+    .button-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        width: 100%;
+
+        .btn {
+            width: 100%;
+        }
+
+    }
+}
