@@ -14,8 +14,17 @@ export default class Login extends Component {
     this.isMountedComponent = false;
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleRegisterClick = this.handleRegisterClick.bind(this);
     
   }
+
+  handleRegisterClick() {
+    if (this.props.openRegisterModal) {
+      this.props.openRegisterModal(); // Llama a la función pasada como prop
+    }
+  }
+
+
   componentDidMount() {
     this.isMountedComponent = true; // El componente se ha montado
   }
@@ -78,7 +87,7 @@ export default class Login extends Component {
       <div>
 
         <div className='title-login'>
-          <h2>LOGIN TO ACCESS YOUR DASHBOARD</h2>
+          <h2>INICIA SESIÓN EN STUDY ONLINE</h2>
         </div>
 
 
@@ -110,7 +119,9 @@ export default class Login extends Component {
 
           <div className="links-login-modal-wrapper">
             <p className="link-forgot-pass">He olvidado la contraseña</p>
-            <p className="link-register">¿No tienes una cuenta? <span className="register-link">Regístrate</span></p>
+            <p className="link-register">¿No tienes una cuenta? 
+              <span className="register-link" onClick={this.handleRegisterClick}>Regístrate</span>
+            </p>
           </div>
         </form>
       </div>

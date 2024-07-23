@@ -14,6 +14,7 @@ import NoMatch from "./pages/no-match";
 import PortfolioManager from "./pages/portfolio-manager";
 import Icons from "./helpers/icons";
 import LoginModal from "./modals/login-modal";
+import RegisterModal from "./modals/register-modal";
 
 
 export default class App extends Component {
@@ -30,10 +31,32 @@ export default class App extends Component {
     this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
     this.handleUnsuccessfulLogin = this.handleUnsuccessfulLogin.bind(this);
     this.handleSuccessfulLogout = this.handleSuccessfulLogout.bind(this);
-    this.openModal = this.openModal.bind(this); 
-    this.closeModal = this.closeModal.bind(this); 
-    
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.openRegisterModal = this.openRegisterModal.bind(this);
+    this.closeRegisterModal = this.closeRegisterModal.bind(this);
+    this.openLoginModal = this.openLoginModal.bind(this);
+
   }
+
+  openLoginModal() {
+    this.setState({
+        isRegisterModalOpen: false,
+        isModalOpen: true
+    });
+}
+
+  openRegisterModal() {
+    this.setState({
+      isModalOpen: false, 
+      isRegisterModalOpen: true
+    });
+  }
+
+  closeRegisterModal() {
+    this.setState({ isRegisterModalOpen: false });
+  }
+
   openModal() {
     this.setState({ isModalOpen: true });
   }
@@ -137,6 +160,12 @@ export default class App extends Component {
               onClose={this.closeModal}
               handleSuccessfulLogin={this.handleSuccessfulLogin}
               handleUnsuccessfulLogin={this.handleUnsuccessfulLogin}
+              openRegisterModal={this.openRegisterModal}
+            />
+            <RegisterModal
+              isOpen={this.state.isRegisterModalOpen}
+              onClose={this.closeRegisterModal}
+              openLoginModal={this.openLoginModal}
             />
           </div>
         </Router>

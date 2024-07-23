@@ -26,7 +26,14 @@ export default class LoginModal extends Component {
 
         this.handleSuccessfulAuth = this.handleSuccessfulAuth.bind(this);
         this.handleUnsuccessfulAuth = this.handleUnsuccessfulAuth.bind(this);
+        this.handleRegisterClick = this.handleRegisterClick.bind(this);
     }
+
+    handleRegisterClick() {
+        if (this.props.openRegisterModal) {
+          this.props.openRegisterModal();
+        }
+      }
 
     handleSuccessfulAuth() {
         this.props.handleSuccessfulLogin();
@@ -38,8 +45,6 @@ export default class LoginModal extends Component {
         this.props.handleUnsuccessfulLogin();
     }
 
-
-
     render() {
         return (
             <ReactModal
@@ -50,6 +55,8 @@ export default class LoginModal extends Component {
                 <Login
                     handleSuccessfulAuth={this.handleSuccessfulAuth}
                     handleUnsuccessfulAuth={this.handleUnsuccessfulAuth}
+                    openRegisterModal={this.props.openRegisterModal}
+                    handleRegisterClick={this.handleRegisterClick}
                 />
 
             </ReactModal>
