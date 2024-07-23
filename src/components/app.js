@@ -10,7 +10,6 @@ import Contact from "./pages/contact";
 import Blog from "./pages/blog";
 import BlogDetails from "./pages/blog-details";
 import PortfolioDetail from "./portfolio/portfolio-detail";
-import Auth from "./pages/auth";
 import NoMatch from "./pages/no-match";
 import PortfolioManager from "./pages/portfolio-manager";
 import Icons from "./helpers/icons";
@@ -33,6 +32,7 @@ export default class App extends Component {
     this.handleSuccessfulLogout = this.handleSuccessfulLogout.bind(this);
     this.openModal = this.openModal.bind(this); 
     this.closeModal = this.closeModal.bind(this); 
+    
   }
   openModal() {
     this.setState({ isModalOpen: true });
@@ -45,13 +45,15 @@ export default class App extends Component {
   handleSuccessfulLogin() {
     this.setState({
       loggedInStatus: "LOGGED_IN"
-    });
+    }, () => this.checkLoginStatus());
+    this.closeModal();
   }
 
   handleUnsuccessfulLogin() {
     this.setState({
       loggedInStatus: "NOT_LOGGED_IN"
     });
+    this.closeModal();
   }
 
   handleSuccessfulLogout() {
@@ -107,17 +109,6 @@ export default class App extends Component {
             />
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route
-                path="/auth"
-                render={props => (
-                  <Auth
-                    {...props}
-                    handleSuccessfulLogin={this.handleSuccessfulLogin}
-                    handleUnsuccessfulLogin={this.handleUnsuccessfulLogin}
-                  />
-                )}
-              />
-
               <Route path="/about-me" component={About} />
               <Route path="/contact" component={Contact} />
               <Route
@@ -144,6 +135,8 @@ export default class App extends Component {
             <LoginModal
               isOpen={this.state.isModalOpen}
               onClose={this.closeModal}
+              handleSuccessfulLogin={this.handleSuccessfulLogin}
+              handleUnsuccessfulLogin={this.handleUnsuccessfulLogin}
             />
           </div>
         </Router>

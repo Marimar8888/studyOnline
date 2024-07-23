@@ -11,8 +11,17 @@ export default class Login extends Component {
       password: "",
       errorText: ""
     };
+    this.isMountedComponent = false;
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    
+  }
+  componentDidMount() {
+    this.isMountedComponent = true; // El componente se ha montado
+  }
+
+  componentWillUnmount() {
+    this.isMountedComponent = false; // El componente se desmonta
   }
 
   handleChange(event) {
@@ -23,6 +32,7 @@ export default class Login extends Component {
   }
 
   handleSubmit(event) {
+    event.preventDefault();
     axios
       .post(
         "https://api.devcamp.space/sessions",
@@ -36,31 +46,40 @@ export default class Login extends Component {
       )
       .then(response => {
         if (response.data.status === "created") {
-          this.props.handleSuccessfulAuth();
+          if (this.isMountedComponent) {
+            this.props.handleSuccessfulAuth();
+          }
         } else {
-          this.setState({
-            errorText: "Wrong email or password"
-          });
-          this.props.handleUnsuccessfulAuth();
+          if (this.isMountedComponent) {
+            this.setState({
+              errorText: "Wrong email or password"
+            });
+            this.props.handleUnsuccessfulAuth();
+          }
         }
       })
       .catch(error => {
-        this.setState({
-          errorText: "An error occurred"
-        });
-        this.props.handleUnsuccessfulAuth();
+        if (error.name === 'CanceledError') {
+          return;
+        }
+        if (this.isMountedComponent) { 
+          this.setState({
+            errorText: "An error occurred"
+          });
+          this.props.handleUnsuccessfulAuth();
+        }
       });
 
-    event.preventDefault();
+
   }
 
   render() {
     return (
       <div>
-        
-      <div className='title-login'>
-        <h2>LOGIN TO ACCESS YOUR DASHBOARD</h2>
-      </div>
+
+        <div className='title-login'>
+          <h2>LOGIN TO ACCESS YOUR DASHBOARD</h2>
+        </div>
 
 
         <div>{this.state.errorText}</div>
