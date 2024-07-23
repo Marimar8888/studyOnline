@@ -14,6 +14,7 @@ import Auth from "./pages/auth";
 import NoMatch from "./pages/no-match";
 import PortfolioManager from "./pages/portfolio-manager";
 import Icons from "./helpers/icons";
+import LoginModal from "./modals/login-modal";
 
 
 export default class App extends Component {
@@ -23,14 +24,23 @@ export default class App extends Component {
     Icons();
 
     this.state = {
-      loggedInStatus: "NOT_LOGGED_IN"
+      loggedInStatus: "NOT_LOGGED_IN",
+      isModalOpen: false
     };
 
     this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
     this.handleUnsuccessfulLogin = this.handleUnsuccessfulLogin.bind(this);
     this.handleSuccessfulLogout = this.handleSuccessfulLogout.bind(this);
+    this.openModal = this.openModal.bind(this); 
+    this.closeModal = this.closeModal.bind(this); 
+  }
+  openModal() {
+    this.setState({ isModalOpen: true });
   }
 
+  closeModal() {
+    this.setState({ isModalOpen: false });
+  }
 
   handleSuccessfulLogin() {
     this.setState({
@@ -93,6 +103,7 @@ export default class App extends Component {
             <NavigationContainer
               loggedInStatus={this.state.loggedInStatus}
               handleSuccessfulLogout={this.handleSuccessfulLogout}
+              openModal={this.openModal}
             />
             <Switch>
               <Route exact path="/" component={Home} />
@@ -130,6 +141,10 @@ export default class App extends Component {
               />
               <Route component={NoMatch} />
             </Switch>
+            <LoginModal
+              isOpen={this.state.isModalOpen}
+              onClose={this.closeModal}
+            />
           </div>
         </Router>
       </div>

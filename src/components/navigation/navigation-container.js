@@ -7,7 +7,12 @@ import { NavLink } from "react-router-dom";
 
 const NavigationComponent = (props) => {
 
-  const dynamicLink =   (route, linkText) => {
+  if (typeof props.openModal !== 'function') {
+    console.error('openModal is not defined or not a function');
+    return null;
+}
+
+  const dynamicLink = (route, linkText) => {
     return(
       <div className="nav-link-wrapper">
         <NavLink to={route} activeClassName="nav-link-active">{linkText}</NavLink>
@@ -53,7 +58,11 @@ const NavigationComponent = (props) => {
         {props.loggedInStatus === "LOGGED_IN" ? (
           <a onClick={handleSignOut}>
             <FontAwesomeIcon icon="sign-out-alt" />
-          </a>) : <NavLink to="/auth"><FontAwesomeIcon icon="door-open" /></NavLink>}
+          </a>) : (
+            <a onClick={props.openModal} className="nav-icon">
+              <FontAwesomeIcon icon="door-open" />
+            </a>
+          )} 
       </div>
     </div>
   );
