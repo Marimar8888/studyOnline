@@ -14,9 +14,10 @@ export default class LoginModal extends Component {
               top: "50%",
               left: "50%",
               right: "auto",
-              marginRight: "-10%",
+              marginRight: "-50%",
               transform: "translate(-50%, -50%)",
-              width: "600px"
+              width: "500px",
+              height: "540px"
             },
             overlay: {
               backgroundColor: "rgba(1, 1, 1, 0.75)"
@@ -41,7 +42,7 @@ export default class LoginModal extends Component {
             onRequestClose={this.handleRequestClose}
         >
             <Login />
-            <button onClick={this.handleRequestClose}>Close</button>
+
         </ReactModal>
         );
     }

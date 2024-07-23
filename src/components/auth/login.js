@@ -57,7 +57,11 @@ export default class Login extends Component {
   render() {
     return (
       <div>
-        <h1>LOGIN TO ACCESS YOUR DASHBOARD</h1>
+        
+      <div className='title-login'>
+        <h2>LOGIN TO ACCESS YOUR DASHBOARD</h2>
+      </div>
+
 
         <div>{this.state.errorText}</div>
 
@@ -83,8 +87,12 @@ export default class Login extends Component {
             />
           </div>
 
-            <button className="btn" type="submit">Login</button>
+          <button className="btn" type="submit">Login</button>
 
+          <div className="links-login-modal-wrapper">
+            <p className="link-forgot-pass">He olvidado la contraseña</p>
+            <p className="link-register">¿No tienes una cuenta? <span className="register-link">Regístrate</span></p>
+          </div>
         </form>
       </div>
     )
