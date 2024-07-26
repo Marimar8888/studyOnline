@@ -1,0 +1,121 @@
+// Store.scss
+
+.store-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; // Asegura que el contenedor ocupe toda la altura de la ventana
+  padding: 50px;
+  box-sizing: border-box; // Incluye padding en el cálculo del ancho total
+  max-width: 1200px; // Limita el ancho máximo del contenedor
+  margin: 0 auto; // Centra el contenedor horizontalmente
+}
+
+.store-carrousell-image-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%; // Asegura que el contenedor tenga la altura completa del carrusel
+  transition: transform 0.5s ease-in-out; // Transición para el efecto de deslizamiento
+  position: relative; // Asegura que las imágenes se posicionen correctamente dentro del contenedor
+
+}
+
+.store-carrousell-image {
+  height: 300px; // Ajusta según tus necesidades
+  background-color: #ccc; // Color de fondo gris para la imagen
+
+    img{
+      width: 100%;
+      height: 100%;
+     
+    }
+}
+
+.store-section-course-wrapper {
+  background-color: #fff; // Fondo blanco
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.store-section-course-text {
+  margin-bottom: 20px;
+}
+
+.store-section-course-selector {
+  display: flex;
+  gap: 10px; // Espacio entre los elementos
+  font-size: 1rem;
+  color: #000; // Letras negras
+   
+  p {
+    margin: 0;
+    padding: 10px;
+    border: 0px solid #ddd;
+    color: $darkgrey;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.5s ease-in-out;
+       
+    &:hover {
+      color: black;
+      font-style: bold;
+    }
+  }
+}
+
+.store-section-course-carrousel {
+  background-color: #f9f9f9; // Fondo gris clarito
+  height: 300px; // Ajusta según tus necesidades
+}
+
+.store-section-categories-wrapper {
+  background-color: #fff; // Fondo blanco
+  padding: 20px;
+ 
+}
+
+.store-section-categories-text {
+  margin-bottom: 20px;
+}
+
+.store-section-categories-links-wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); // 4 columnas
+  gap: 10px; // Espacio entre los elementos
+  justify-items: center; // Centra los elementos en las columnas
+}
+
+.store-section-categories-links-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 200px; // Limita el ancho máximo de los elementos
+}
+
+.store-section-categories-links-image-button {
+
+  background-color: #e4dede; // Fondo gris oscuro
+  width: 100%; // Ocupa todo el ancho del contenedor
+  height: 290px;
+  padding: 22px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background-color 0.3s;
+ 
+  &:hover {
+    background-color: #d0d0d0; // Gris un poco más oscuro al pasar el ratón
+  }
+
+   img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; // Asegura que la imagen cubra el contenedor
+  }
+}
+
+.store-section-categories-links-image-text {
+  padding: 10px;
+  text-align: center;
+  color: #000; // Letras negras
+}

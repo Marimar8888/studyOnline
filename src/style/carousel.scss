@@ -1,0 +1,44 @@
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    height: 300px; // Ajusta según el tamaño deseado del carrusel
+  }
+  
+  .carousel-image-wrapper {
+    display: flex;
+    width: 200%; // Ancho para incluir las imágenes duplicadas
+    height: 100%;
+    transition: transform 0.5s ease-in-out; // Transición suave para el deslizamiento
+  }
+  
+  .carousel-image {
+    width: 50%; // Cada imagen ocupa la mitad del ancho del contenedor
+    height: 100%;
+    object-fit: cover; // Asegura que la imagen cubra el contenedor sin distorsionarse
+  }
+  
+  .carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1;
+  
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+  
+    &.prev {
+      left: 10px;
+    }
+  
+    &.next {
+      right: 10px;
+    }
+  }
+  

@@ -15,6 +15,8 @@ import PortfolioManager from "./pages/portfolio-manager";
 import Icons from "./helpers/icons";
 import LoginModal from "./modals/login-modal";
 import RegisterModal from "./modals/register-modal";
+import Footer from "./foot/footer";
+import Store from "./pages/store";
 
 
 export default class App extends Component {
@@ -132,6 +134,7 @@ export default class App extends Component {
             />
             <Switch>
               <Route exact path="/" component={Home} />
+              <Route path="/store" component={Store} />
               <Route path="/about-me" component={About} />
               <Route path="/contact" component={Contact} />
               <Route
@@ -167,6 +170,7 @@ export default class App extends Component {
               onClose={this.closeRegisterModal}
               openLoginModal={this.openLoginModal}
             />
+            <Footer/>
           </div>
         </Router>
       </div>
