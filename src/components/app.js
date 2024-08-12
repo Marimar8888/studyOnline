@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import NavigationContainer from "./navigation/navigation-container";
 import Home from "./pages/home";
 import About from "./pages/about";
@@ -43,14 +42,14 @@ export default class App extends Component {
 
   openLoginModal() {
     this.setState({
-        isRegisterModalOpen: false,
-        isModalOpen: true
+      isRegisterModalOpen: false,
+      isModalOpen: true
     });
-}
+  }
 
   openRegisterModal() {
     this.setState({
-      isModalOpen: false, 
+      isModalOpen: false,
       isRegisterModalOpen: true
     });
   }
@@ -69,112 +68,103 @@ export default class App extends Component {
 
   handleSuccessfulLogin() {
     this.setState({
+        loggedInStatus: "LOGGED_IN"
+    }, () => {
+        console.log("Logged in status:", this.state.loggedInStatus); 
+        this.checkLoginStatus(); 
+        this.closeModal(); 
+    });
+  }
+
+handleUnsuccessfulLogin() {
+  this.setState({
+    loggedInStatus: "NOT_LOGGED_IN"
+  });
+  this.closeModal();
+}
+
+handleSuccessfulLogout() {
+  this.setState({
+    loggedInStatus: "NOT_LOGGED_IN"
+  });
+}
+
+
+checkLoginStatus() {
+  const token = localStorage.getItem("token"); // O el nombre que hayas dado al token
+  const loggedInStatus = this.state.loggedInStatus;
+
+  if (token && loggedInStatus === "NOT_LOGGED_IN"){
+    this.setState({
       loggedInStatus: "LOGGED_IN"
-    }, () => this.checkLoginStatus());
-    console.log("Logged in status:", this.state.loggedInStatus);
-    this.closeModal();
-  }
-
-  handleUnsuccessfulLogin() {
-    this.setState({
-      loggedInStatus: "NOT_LOGGED_IN"
     });
-    this.closeModal();
-  }
-
-  handleSuccessfulLogout() {
+  } else if (!token && loggedInStatus === "LOGGED_IN") {
     this.setState({
       loggedInStatus: "NOT_LOGGED_IN"
     });
   }
+}
 
+componentDidMount() {
+  this.checkLoginStatus();
+}
 
-  checkLoginStatus() {
-    return axios
-      .get("https://api.devcamp.space/logged_in", {
-        withCredentials: true
-      })
-      .then(response => {
-        const loggedIn = response.data.logged_in;
-        const loggedInStatus = this.state.loggedInStatus;
+authorizedPages() {
+  return [<Route key="portfolio-manager" path="/portfolio-manager" component={PortfolioManager} />];
+}
 
-        if (loggedIn && loggedInStatus === "LOGGED_IN") {
-          return loggedIn;
-        } else if (loggedIn && loggedInStatus === "NOT_LOGGED_IN") {
-          this.setState({
-            loggedInStatus: "LOGGED_IN"
-          });
-        } else if (!loggedIn && loggedInStatus === "LOGGED_IN") {
-          this.setState({
-            loggedInStatus: "NOT_LOGGED_IN"
-          });
-        }
-      })
-      .catch(error => {
-        console.log("Error", error);
-      });
-  }
-
-  componentDidMount() {
-    this.checkLoginStatus();
-  }
-
-  authorizedPages() {
-    return [<Route key="portfolio-manager" path="/portfolio-manager" component={PortfolioManager} />];
-  }
-
-  render() {
-    return (
-      <div className="container">
-        <Router>
-          <div>
-            <NavigationContainer
-              loggedInStatus={this.state.loggedInStatus}
-              handleSuccessfulLogout={this.handleSuccessfulLogout}
-              openModal={this.openModal}
+render() {
+  return (
+    <div className="container">
+      <Router>
+        <div>
+          <NavigationContainer
+            loggedInStatus={this.state.loggedInStatus}
+            handleSuccessfulLogout={this.handleSuccessfulLogout}
+            openModal={this.openModal}
+          />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/store" component={Store} />
+            <Route path="/about-me" component={About} />
+            <Route path="/contact" component={Contact} />
+            <Route
+              path="/blog"
+              render={props => (
+                <Blog {...props} loggedInStatus={this.state.loggedInStatus} />
+              )}
             />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/store" component={Store} />
-              <Route path="/about-me" component={About} />
-              <Route path="/contact" component={Contact} />
-              <Route
-                path="/blog"
-                render={props => (
-                  <Blog {...props} loggedInStatus={this.state.loggedInStatus} />
-                )}
-              />
-              <Route
-                path="/b/:slug"
-                render={props => (
-                  <BlogDetails {...props} loggedInStatus={this.state.loggedInStatus}
-                  />
-                )}
-              />
-              {this.state.loggedInStatus === "LOGGED_IN" ? (this.authorizedPages()) : null}
-              <Route
-                exact
-                path="/portfolio/:slug"
-                component={PortfolioDetail}
-              />
-              <Route component={NoMatch} />
-            </Switch>
-            <LoginModal
-              isOpen={this.state.isModalOpen}
-              onClose={this.closeModal}
-              handleSuccessfulLogin={this.handleSuccessfulLogin}
-              handleUnsuccessfulLogin={this.handleUnsuccessfulLogin}
-              openRegisterModal={this.openRegisterModal}
+            <Route
+              path="/b/:slug"
+              render={props => (
+                <BlogDetails {...props} loggedInStatus={this.state.loggedInStatus}
+                />
+              )}
             />
-            <RegisterModal
-              isOpen={this.state.isRegisterModalOpen}
-              onClose={this.closeRegisterModal}
-              openLoginModal={this.openLoginModal}
+            {this.state.loggedInStatus === "LOGGED_IN" ? (this.authorizedPages()) : null}
+            <Route
+              exact
+              path="/portfolio/:slug"
+              component={PortfolioDetail}
             />
-            <Footer/>
-          </div>
-        </Router>
-      </div>
-    );
-  }
+            <Route component={NoMatch} />
+          </Switch>
+          <LoginModal
+            isOpen={this.state.isModalOpen}
+            onClose={this.closeModal}
+            handleSuccessfulLogin={this.handleSuccessfulLogin}
+            handleUnsuccessfulLogin={this.handleUnsuccessfulLogin}
+            openRegisterModal={this.openRegisterModal}
+          />
+          <RegisterModal
+            isOpen={this.state.isRegisterModalOpen}
+            onClose={this.closeRegisterModal}
+            openLoginModal={this.openLoginModal}
+          />
+          <Footer />
+        </div>
+      </Router>
+    </div>
+  );
+}
 }

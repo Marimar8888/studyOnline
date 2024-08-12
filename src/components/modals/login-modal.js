@@ -38,7 +38,6 @@ export default class LoginModal extends Component {
     handleSuccessfulAuth() {
         this.props.handleSuccessfulLogin();
         this.props.onClose(); 
-        this.props.history.push("/contact");
     }
 
     handleUnsuccessfulAuth() {

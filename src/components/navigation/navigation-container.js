@@ -3,18 +3,17 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router";
 import { NavLink } from "react-router-dom";
-import { faSignOutAlt, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
 
 
 const NavigationComponent = (props) => {
-
+  console.log('NavigationComponent props:', props);
   if (typeof props.openModal !== 'function') {
     console.error('openModal is not defined or not a function');
     return null;
-  }
+}
 
   const dynamicLink = (route, linkText) => {
-    return (
+    return(
       <div className="nav-link-wrapper">
         <NavLink to={route} activeClassName="nav-link-active">{linkText}</NavLink>
       </div>
@@ -53,29 +52,20 @@ const NavigationComponent = (props) => {
         <div className="nav-link-wrapper">
           <NavLink to="/blog" activeClassName="nav-link-active">Blog</NavLink>
         </div>
-        {props.loggedInStatus === "LOGGED_IN" ? (dynamicLink("/portfolio-manager", "Porfolio Manager")) : null}
+        {props.loggedInStatus === "LOGGED_IN" ? (dynamicLink("/portfolio-manager", "Porfolio Manager")) : null }
 
         {false ? <button>Add Blog</button> : null}
       </div>
       <div className="right-side">
         MARIA DEL MAR ALONSO
-        {/*         {props.loggedInStatus === "LOGGED_IN" ? (
+        {props.loggedInStatus === "LOGGED_IN" ? (
           <a onClick={handleSignOut}>
             <FontAwesomeIcon icon="sign-out-alt" />
           </a>) : (
             <a onClick={props.openModal} className="nav-icon">
               <FontAwesomeIcon icon="door-open" />
             </a>
-          )}  */}
-        {props.loggedInStatus === "LOGGED_IN" ? (
-          <a onClick={handleSignOut} className="nav-icon">
-            <FontAwesomeIcon icon={faSignOutAlt} />
-          </a>
-        ) : (
-          <a onClick={props.openModal} className="nav-icon">
-            <FontAwesomeIcon icon={faDoorOpen} />
-          </a>
-        )}
+          )} 
       </div>
     </div>
   );

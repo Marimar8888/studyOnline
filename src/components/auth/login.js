@@ -44,18 +44,17 @@ export default class Login extends Component {
     event.preventDefault();
     axios
       .post(
-        "https://api.devcamp.space/sessions",
+        "http://localhost:5000/login",
         {
-          client: {
-            email: this.state.email,
-            password: this.state.password
-          }
-        },
-        { withCredentials: true }
+            users_email: this.state.email,
+            users_password: this.state.password
+        }
       )
       .then(response => {
-        if (response.data.status === "created") {
+        console.log(response.status);
+        if (response.status === 200) {
           if (this.isMountedComponent) {
+            localStorage.getItem('token', response.data.token);
             this.props.handleSuccessfulAuth();
           }
         } else {
