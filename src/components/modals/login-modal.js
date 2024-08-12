@@ -58,7 +58,6 @@ export default class LoginModal extends Component {
                     openRegisterModal={this.props.openRegisterModal}
                     handleRegisterClick={this.handleRegisterClick}
                 />
-
             </ReactModal>
         );
     }

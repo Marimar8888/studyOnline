@@ -71,6 +71,7 @@ export default class App extends Component {
     this.setState({
       loggedInStatus: "LOGGED_IN"
     }, () => this.checkLoginStatus());
+    console.log("Logged in status:", this.state.loggedInStatus);
     this.closeModal();
   }
 

@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
-
 import CarouselImages from './carousel-img/carousel-images'
+
+import music from "./../../../static/assets/images/categories/music.png";
+import persolacrow from "./../../../static/assets/images/categories/personalcrow.png";
+import program from "./../../../static/assets/images/categories/program.png";
+
 
 export default class StoreContainer extends Component {
   render() {
@@ -38,7 +42,7 @@ export default class StoreContainer extends Component {
             <div className='store-section-categories-links-wrapper'>
                 <div className='store-section-categories-links-image'>
                     <div className='store-section-categories-links-image-button'>
-                        <img src='../../../static/assets/images/categories/program.png'></img>
+                        <img src={program}></img>
                     </div>
                     <div className='store-section-categories-links-image-text'>
                         <p>Programación</p>
@@ -46,7 +50,7 @@ export default class StoreContainer extends Component {
                 </div>
                 <div className='store-section-categories-links-image'>
                     <div className='store-section-categories-links-image-button'>
-                        <img src='../../../static/assets/images/categories/music.png'></img>
+                        <img src='./../../../static/assets/images/categories/program.png'></img>
                     </div>
                     <div className='store-section-categories-links-image-text'>
                         <p>Dibujo</p>
@@ -54,7 +58,7 @@ export default class StoreContainer extends Component {
                 </div>
                 <div className='store-section-categories-links-image'>
                     <div className='store-section-categories-links-image-button'>
-                        <img src='../../../static/assets/images/categories/music.png'></img>
+                        <img src='./../../../static/assets/images/categories/program.png'></img>
                     </div>
                     <div className='store-section-categories-links-image-text'>
                         <p>Marketing</p>
@@ -62,7 +66,7 @@ export default class StoreContainer extends Component {
                 </div>
                 <div className='store-section-categories-links-image'>
                     <div className='store-section-categories-links-image-button'>
-                        <img src='../../../static/assets/images/categories/music.png'></img>
+                        <img src='./../../../static/assets/images/categories/program.png'></img>
                     </div>
                     <div className='store-section-categories-links-image-text'>
                         <p>Fotografía</p>
@@ -70,7 +74,7 @@ export default class StoreContainer extends Component {
                 </div>
                 <div className='store-section-categories-links-image'>
                     <div className='store-section-categories-links-image-button'>
-                        <img src='../../../static/assets/images/categories/music.png'></img>
+                        <img src='./../../../static/assets/images/categories/program.png'></img>
                     </div>
                     <div className='store-section-categories-links-image-text'>
                         <p>Liderazgo</p>
@@ -78,7 +82,7 @@ export default class StoreContainer extends Component {
                 </div>
                 <div className='store-section-categories-links-image'>
                     <div className='store-section-categories-links-image-button'>
-                        <img src='../../../static/assets/images/categories/personalcrow.png'></img>
+                        <img src={persolacrow}></img>
                     </div>
                     <div className='store-section-categories-links-image-text'>
                         <p>Crecimiento Personal</p>
@@ -86,7 +90,7 @@ export default class StoreContainer extends Component {
                 </div>
                 <div className='store-section-categories-links-image'>
                     <div className='store-section-categories-links-image-button'>
-                        <img src='../../../static/assets/images/categories/music.png'></img>
+                        <img src={music}></img>
                     </div>
                     <div className='store-section-categories-links-image-text'>
                         <p>Música</p>
@@ -94,7 +98,7 @@ export default class StoreContainer extends Component {
                 </div>
                 <div className='store-section-categories-links-image'>
                     <div className='store-section-categories-links-image-button'>
-                        <img src='../../../static/assets/images/categories/music.png'></img>
+                        <img src='./../../../static/assets/images/categories/program.png'></img>
                     </div>
                     <div className='store-section-categories-links-image-text'>
                         <p>Finanzas</p>
