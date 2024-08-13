@@ -20,8 +20,8 @@ export default class Register extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
-    handleSubmit(event){
+
+    handleSubmit(event) {
         event.preventDefault();
         axios
             .post(
@@ -33,26 +33,66 @@ export default class Register extends Component {
                 }
             )
             .then(response => {
-                console.log("response:", response);
+                console.log(response);
+                if (response.status === 201) {
+                    if (this.isMountedComponent) {
+                        this.props.handleSuccessfulReg();
+                    }
+                }
             })
+            .catch(error => {
+                if (error.response) {
+                    if (this.isMountedComponent) {
+                        if (error.response.status === 400) {
+                            this.setState({
+                                errorText: error.response.data.error 
+                            });
+                        } else if (error.response.status === 404) {
+                            this.setState({
+                                errorText: "No se pudo encontrar un recurso necesario en el servidor."
+                            });
+                        } else if (error.response.status === 500) {
+                            this.setState({
+                                errorText: "Hubo un error en el servidor. Por favor, inténtalo más tarde."
+                            });
+                        } else {
+                            this.setState({
+                                errorText: "Ocurrió un error inesperado. Por favor, inténtalo de nuevo."
+                            });
+                        }
+                    }
+                } else if (error.request) {
+                    if (this.isMountedComponent) {
+                        this.setState({
+                            errorText: "No se pudo obtener una respuesta del servidor. Verifica tu conexión a internet."
+                        });
+                    }
+                } else {
+                    if (this.isMountedComponent) {
+                        this.setState({
+                            errorText: "Ocurrió un error al procesar la solicitud. Por favor, inténtalo de nuevo."
+                        });
+                    }
+                }
+            });
 
     }
 
-    handleLoginClick(){
+    handleLoginClick() {
         if (this.props.openLoginModal) {
-            this.props.openLoginModal(); // Llama a la función pasada como prop
+            this.props.openLoginModal();
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.isMountedComponent = true;
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.isMountedComponent = false;
-    }    
+    }
 
-    handleChange(event){
+    handleChange(event) {
         this.setState({
             [event.target.name]: event.target.value,
             errorText: ""
@@ -68,7 +108,7 @@ export default class Register extends Component {
                 </div>
 
 
-                <div>{this.state.errorText}</div>
+                
 
                 <form onSubmit={this.handleSubmit} className="auth-form-wrapper">
                     <div className="form-group">
@@ -101,6 +141,8 @@ export default class Register extends Component {
                             onChange={this.handleChange}
                         />
                     </div>
+
+                    <div className="errorText">{this.state.errorText}</div>
 
                     <button className="btn" type="submit">Regístrate</button>
 

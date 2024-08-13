@@ -25,10 +25,16 @@ export default class RegisterModal extends Component {
         };
 
         this.handleClose = this.handleClose.bind(this);
+        this.handleSuccessfulReg = this.handleSuccessfulReg.bind(this);
     }
 
     handleClose() {
         this.props.onClose();
+    }
+
+    handleSuccessfulReg() {
+        this.props.handleSuccessfulRegister();
+        this.props.onClose(); 
     }
 
     render() {
@@ -39,7 +45,10 @@ export default class RegisterModal extends Component {
                 onRequestClose={this.handleClose}
             >
            
-            <Register openLoginModal={this.props.openLoginModal}/>
+            <Register 
+                openLoginModal={this.props.openLoginModal}
+                handleSuccessfulReg={this.handleSuccessfulReg}
+            />
               
             </ReactModal>
         );

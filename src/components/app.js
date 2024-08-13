@@ -32,11 +32,13 @@ export default class App extends Component {
     this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
     this.handleUnsuccessfulLogin = this.handleUnsuccessfulLogin.bind(this);
     this.handleSuccessfulLogout = this.handleSuccessfulLogout.bind(this);
+    this.handleSuccessfulRegister = this.handleSuccessfulRegister.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.openRegisterModal = this.openRegisterModal.bind(this);
     this.closeRegisterModal = this.closeRegisterModal.bind(this);
     this.openLoginModal = this.openLoginModal.bind(this);
+
 
   }
 
@@ -64,6 +66,11 @@ export default class App extends Component {
 
   closeModal() {
     this.setState({ isModalOpen: false });
+  }
+
+  
+  handleSuccessfulRegister(){
+    this.openLoginModal();
   }
 
   handleSuccessfulLogin() {
@@ -159,6 +166,7 @@ render() {
             isOpen={this.state.isRegisterModalOpen}
             onClose={this.closeRegisterModal}
             openLoginModal={this.openLoginModal}
+            handleSuccessfulRegister={this.handleSuccessfulRegister}
           />
           <Footer />
         </div>

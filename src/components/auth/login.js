@@ -87,10 +87,6 @@ export default class Login extends Component {
         <div className='title-login'>
           <h2>INICIA SESIÓN EN STUDY ONLINE</h2>
         </div>
-
-
-        <div>{this.state.errorText}</div>
-
         <form onSubmit={this.handleSubmit} className="auth-form-wrapper">
           <div className="form-group">
             <FontAwesomeIcon icon="envelope" />
@@ -113,6 +109,8 @@ export default class Login extends Component {
             />
           </div>
 
+          <div className="errorText">{this.state.errorText}</div>
+          
           <button className="btn" type="submit">Login</button>
 
           <div className="links-login-modal-wrapper">
