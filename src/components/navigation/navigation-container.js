@@ -6,7 +6,6 @@ import { NavLink } from "react-router-dom";
 
 
 const NavigationComponent = (props) => {
-  console.log('NavigationComponent props:', props);
   if (typeof props.openModal !== 'function') {
     console.error('openModal is not defined or not a function');
     return null;
