@@ -51,10 +51,9 @@ export default class Login extends Component {
         }
       )
       .then(response => {
-        console.log(response.status);
         if (response.status === 200) {
           if (this.isMountedComponent) {
-            localStorage.getItem('token', response.data.token);
+            localStorage.setItem('token', response.data.token);
             this.props.handleSuccessfulAuth();
           }
         } else {

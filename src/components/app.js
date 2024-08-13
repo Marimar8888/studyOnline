@@ -91,9 +91,8 @@ handleSuccessfulLogout() {
 
 
 checkLoginStatus() {
-  const token = localStorage.getItem("token"); // O el nombre que hayas dado al token
+  const token = localStorage.getItem("token"); 
   const loggedInStatus = this.state.loggedInStatus;
-
   if (token && loggedInStatus === "NOT_LOGGED_IN"){
     this.setState({
       loggedInStatus: "LOGGED_IN"
