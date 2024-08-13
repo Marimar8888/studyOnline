@@ -66,13 +66,40 @@ export default class Login extends Component {
         }
       })
       .catch(error => {
-        if (error.name === 'CanceledError') {
-          return;
-        }
-        if (this.isMountedComponent) { 
-          this.setState({
-            errorText: "An error occurred"
-          });
+        if (this.isMountedComponent) {
+          if (error.response) {
+            switch (error.response.status) {
+              case 400:
+                this.setState({
+                  errorText: error.response.data.error 
+                });
+                break;
+              case 404:
+                this.setState({
+                  errorText: "Usuario no encontrado"
+                });
+                break;
+              case 401:
+                this.setState({
+                  errorText: "Contraseña incorrecta"
+                });
+                break;
+              default:
+                this.setState({
+                  errorText: "Error inesperado. Por favor, inténtalo de nuevo."
+                });
+            }
+          } else if (error.request) {
+
+            this.setState({
+              errorText: "Error inesperado. Verifica tu conexión a internet."
+            });
+          } else {
+
+            this.setState({
+              errorText: "Error al procesar la solicitud. Por favor, inténtalo de nuevo."
+            });
+          }
           this.props.handleUnsuccessfulAuth();
         }
       });
@@ -110,7 +137,7 @@ export default class Login extends Component {
           </div>
 
           <div className="errorText">{this.state.errorText}</div>
-          
+
           <button className="btn" type="submit">Login</button>
 
           <div className="links-login-modal-wrapper">

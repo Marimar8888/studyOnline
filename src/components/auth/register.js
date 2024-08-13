@@ -33,7 +33,6 @@ export default class Register extends Component {
                 }
             )
             .then(response => {
-                console.log(response);
                 if (response.status === 201) {
                     if (this.isMountedComponent) {
                         this.props.handleSuccessfulReg();
@@ -41,41 +40,45 @@ export default class Register extends Component {
                 }
             })
             .catch(error => {
-                if (error.response) {
-                    if (this.isMountedComponent) {
-                        if (error.response.status === 400) {
+                if (this.isMountedComponent) {
+                    if (error.response) {
+                        switch (error.response.status) {
+                            case 400:
+                                this.setState({
+                                    errorText: error.response.data.error
+                                });
+                                break;
+                            case 404:
+                                this.setState({
+                                    errorText: "No se pudo encontrar un recurso necesario en el servidor."
+                                });
+                                break;
+                            case 500:
+                                this.setState({
+                                    errorText: "Error en el servidor. Por favor, inténtalo más tarde."
+                                });
+                                break;
+                            default:
+                                this.setState({
+                                    errorText: "Error inesperado. Por favor, inténtalo de nuevo."
+                                });                                
+                            
+                        }
+                    }else if (error.request) {
+                        if (this.isMountedComponent) {
                             this.setState({
-                                errorText: error.response.data.error 
+                                errorText: "No se pudo obtener una respuesta del servidor. Verifica tu conexión a internet."
                             });
-                        } else if (error.response.status === 404) {
+                        }
+                    }else {
+                        if (this.isMountedComponent) {
                             this.setState({
-                                errorText: "No se pudo encontrar un recurso necesario en el servidor."
-                            });
-                        } else if (error.response.status === 500) {
-                            this.setState({
-                                errorText: "Hubo un error en el servidor. Por favor, inténtalo más tarde."
-                            });
-                        } else {
-                            this.setState({
-                                errorText: "Ocurrió un error inesperado. Por favor, inténtalo de nuevo."
+                                errorText: "Ocurrió un error al procesar la solicitud. Por favor, inténtalo de nuevo."
                             });
                         }
                     }
-                } else if (error.request) {
-                    if (this.isMountedComponent) {
-                        this.setState({
-                            errorText: "No se pudo obtener una respuesta del servidor. Verifica tu conexión a internet."
-                        });
-                    }
-                } else {
-                    if (this.isMountedComponent) {
-                        this.setState({
-                            errorText: "Ocurrió un error al procesar la solicitud. Por favor, inténtalo de nuevo."
-                        });
-                    }
                 }
             });
-
     }
 
     handleLoginClick() {
@@ -106,9 +109,6 @@ export default class Register extends Component {
                 <div className='title-login'>
                     <h2>REGISTRATE Y EMPIEZA A APRENDER</h2>
                 </div>
-
-
-                
 
                 <form onSubmit={this.handleSubmit} className="auth-form-wrapper">
                     <div className="form-group">

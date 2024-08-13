@@ -87,7 +87,6 @@ handleUnsuccessfulLogin() {
   this.setState({
     loggedInStatus: "NOT_LOGGED_IN"
   });
-  this.closeModal();
 }
 
 handleSuccessfulLogout() {
