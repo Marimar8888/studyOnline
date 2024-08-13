@@ -9,13 +9,14 @@ import {
     faEnvelope,
     faMapMarkedAlt,
     faLock,
-    faDoorOpen
+    faDoorOpen,
+    faUser
 } from '@fortawesome/free-solid-svg-icons';
 
 const Icons = () => {
 
     return library.add(faTrash, faSignOutAlt, faEdit, faSpinner, faPlusCircle, faPhone, 
-        faEnvelope, faMapMarkedAlt, faLock, faDoorOpen);
+        faEnvelope, faMapMarkedAlt, faLock, faDoorOpen, faUser);
 
 }
 

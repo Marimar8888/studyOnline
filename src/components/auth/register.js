@@ -10,6 +10,7 @@ export default class Register extends Component {
         super(props);
 
         this.state = {
+            name: "",
             email: "",
             password: "",
             errorText: ""
@@ -37,6 +38,15 @@ export default class Register extends Component {
                 <div>{this.state.errorText}</div>
 
                 <form  className="auth-form-wrapper">
+                    <div className="form-group">
+                        <FontAwesomeIcon icon="user" />
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Your user name"
+         
+                        />
+                    </div>
                     <div className="form-group">
                         <FontAwesomeIcon icon="envelope" />
                         <input
