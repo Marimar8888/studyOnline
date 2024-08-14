@@ -11,6 +11,7 @@ import BlogDetails from "./pages/blog-details";
 import PortfolioDetail from "./portfolio/portfolio-detail";
 import NoMatch from "./pages/no-match";
 import PortfolioManager from "./pages/portfolio-manager";
+import CourseManager from "./pages/course-manager";
 import Icons from "./helpers/icons";
 import LoginModal from "./modals/login-modal";
 import RegisterModal from "./modals/register-modal";
@@ -115,7 +116,10 @@ componentDidMount() {
 }
 
 authorizedPages() {
-  return [<Route key="portfolio-manager" path="/portfolio-manager" component={PortfolioManager} />];
+  return [
+    <Route key="portfolio-manager" path="/portfolio-manager" component={PortfolioManager}/>,
+    <Route key="course-manager" path="/course-manager" component={CourseManager} />
+  ];
 }
 
 render() {

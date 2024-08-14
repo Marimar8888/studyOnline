@@ -43,6 +43,7 @@ const NavigationComponent = (props) => {
           <NavLink to="/blog" activeClassName="nav-link-active">Blog</NavLink>
         </div>
         {props.loggedInStatus === "LOGGED_IN" ? (dynamicLink("/portfolio-manager", "Porfolio Manager")) : null }
+        {props.loggedInStatus === "LOGGED_IN" ? (dynamicLink("/course-manager", "Course Manager")) : null }
 
         {false ? <button>Add Blog</button> : null}
       </div>
