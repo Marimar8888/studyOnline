@@ -90,13 +90,13 @@ export default class CourseManager extends Component {
         return (
             <div className="course-manager-wrapper">
             <div className="left-column">
-   {/*            <CourseForm
-                handleNewFormSubmission={this.handleNewFormSubmission}
+           <CourseForm
+/*                 handleNewFormSubmission={this.handleNewFormSubmission}
                 handleEditFormSubmission={this.handleEditFormSubmission}
                 handleFormSubmissionError={this.handleFormSubmissionError}
                 clearCourseToEdit={this.clearCourseToEdit}
-                courseToEdit={this.state.courseToEdit}
-              /> */}
+                courseToEdit={this.state.courseToEdit} */
+              /> 
             </div>
            
             <div className="right-column">

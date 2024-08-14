@@ -7,7 +7,7 @@ import "../../../node_modules/react-dropzone-component/styles/filepicker.css";
 
 
 export default class CourseForm extends Component {
-/*   constructor(props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -17,7 +17,7 @@ export default class CourseForm extends Component {
       discounted_price: "",
       professor: "",
       center: "",
-      category: "Programación",
+      categories: [],
       image: "",
       editMode: false,
       apiUrl: "http://localhost:5000/courses",
@@ -28,25 +28,39 @@ export default class CourseForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.componentConfig = this.componentConfig.bind(this);
     this.djsConfig = this.djsConfig.bind(this);
-    this.handleImageDrop = this.handleThumbDrop.bind(this);
+    this.handleImageDrop = this.handleImageDrop.bind(this);
     this.deleteImage = this.deleteImage.bind(this);
 
     this.imgRef = React.createRef();
   }
 
+  componentDidMount() {
+    axios.get('http://localhost:5000/categories')
+      .then(response => {
+        console.log(response.data);
+        this.setState({
+          categories: response.data
+        });
+      })
+      .catch(error => {
+        console.log('Error fetchin categories', error);
+      });
+  }
+
   componentDidUpdate() {
-    if (Object.keys(this.props.courseToEdit).length > 0) {
+    if (this.props.courseToEdit && Object.keys(this.props.courseToEdit).length > 0) {
       const {
-        id,
-        title,
-        content,
-        price,
-        discounted_price,
-        professor,
-        center,
-        category,
-        image
+        courses_id,
+        courses_title,
+        courses_content,
+        courses_price,
+        courses_discounted_price,
+        courses_professor,
+        courses_studycenter,
+        courses_category,
+        courses_image
       } = this.props.courseToEdit;
+
 
       this.props.clearCourseToEdit();
 
@@ -68,21 +82,21 @@ export default class CourseForm extends Component {
   }
 
   deleteImage() {
-    axios
-      .delete(
-        `http://localhost:5000/course/${this.state.courses_id}?image_type=${imageType}`
-      )
-      .then(response => {
-        if (response) {
-          this.setState({
-            [`${imageType}_url`]: ""
-          });
-          this.props.handleEditFormSubmission();
-        }
-      })
-      .catch(error => {
-        console.log("deleteImage error", error);
-      });
+    /*   axios
+        .delete(
+          `http://localhost:5000/course/${this.state.courses_id}?image_type=${imageType}`
+        )
+        .then(response => {
+          if (response) {
+            this.setState({
+              [`${imageType}_url`]: ""
+            });
+            this.props.handleEditFormSubmission();
+          }
+        })
+        .catch(error => {
+          console.log("deleteImage error", error);
+        }); */
   }
 
   handleImageDrop() {
@@ -106,7 +120,7 @@ export default class CourseForm extends Component {
     };
   }
 
-  handleChange() {
+  handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value
     });
@@ -114,44 +128,44 @@ export default class CourseForm extends Component {
 
   handleSubmit(event) {
 
-    axios({
-      method: this.state.apiAction,
-      url: this.state.apiUrl,
-      data: this.buildForm(),
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-      .then(response => {
-        console.log(response);
-        if (this.state.editMode) {
-          this.props.handleEditFormSubmission();
-        } else {
-          this.props.handleNewFormSubmission(response.data);
-        }
-
-        this.setState({
-          title: "",
-          content: "",
-          price: "",
-          discounted_price: "",
-          professor: "",
-          center: "",
-          category: "Programación",
-          image: "",
-          editMode: false,
-          apiUrl: "http://localhost:5000/courses",
-          apiAction: "post"
-        });
-
-        if (this.imgRef.current) {
-          this.imgRef.current.dropzone.removeAllFiles();
+    /*   axios({
+        method: this.state.apiAction,
+        url: this.state.apiUrl,
+        data: this.buildForm(),
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       })
-      .catch(error => {
-        console.log("course form handleSubmit error", error);
-      });
-
+        .then(response => {
+          console.log(response);
+          if (this.state.editMode) {
+            this.props.handleEditFormSubmission();
+          } else {
+            this.props.handleNewFormSubmission(response.data);
+          }
+  
+          this.setState({
+            title: "",
+            content: "",
+            price: "",
+            discounted_price: "",
+            professor: "",
+            center: "",
+            category: "Programación",
+            image: "",
+            editMode: false,
+            apiUrl: "http://localhost:5000/courses",
+            apiAction: "post"
+          });
+  
+          if (this.imgRef.current) {
+            this.imgRef.current.dropzone.removeAllFiles();
+          }
+        })
+        .catch(error => {
+          console.log("course form handleSubmit error", error);
+        });
+   */
     event.preventDefault();
   }
 
@@ -190,22 +204,23 @@ export default class CourseForm extends Component {
             onChange={this.handleChange}
             className="select-element"
           >
-            <option value="Social Media">Social Media</option>
-            <option value="Website">Website</option>
-            <option value="Education">Education</option>
-            <option value="Tecnology">Tecnology</option>
+            {this.state.categories.map(category => (
+              <option key={category.categories_id} value={category.categories_id}>
+                {category.categories_name}
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="two-column">
-        <input
+          <input
             type="text"
             name="professor"
             placeholder="Course professor"
             value={this.state.professor}
             onChange={this.handleChange}
           />
-        <input
+          <input
             type="text"
             name="center"
             placeholder="Course center"
@@ -215,14 +230,14 @@ export default class CourseForm extends Component {
         </div>
 
         <div className="two-column">
-        <input
+          <input
             type="number"
             name="price"
             placeholder="Course price"
             value={this.state.price}
             onChange={this.handleChange}
           />
-        <input
+          <input
             type="number"
             name="discounted_price"
             placeholder="Course discounted"
@@ -257,7 +272,7 @@ export default class CourseForm extends Component {
               ref={this.imgRef}
               config={this.componentConfig()}
               djsConfig={this.djsConfig()}
-              eventHandlers={this.handleImgDrop()}
+              eventHandlers={this.handleImageDrop()}
             >
               <div className="dz-message">Image</div>
             </DropzoneComponent>
@@ -271,7 +286,7 @@ export default class CourseForm extends Component {
         </div>
       </form>
     );
-  } */
+  }
 }
 
 
