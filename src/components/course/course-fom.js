@@ -5,6 +5,8 @@ import { DropzoneComponent } from 'react-dropzone-component';
 import "../../../node_modules/dropzone/dist/min/dropzone.min.css";
 import "../../../node_modules/react-dropzone-component/styles/filepicker.css";
 
+import { API_URL } from '../../utils/constant';
+
 
 export default class CourseForm extends Component {
   constructor(props) {
@@ -15,12 +17,12 @@ export default class CourseForm extends Component {
       content: "",
       price: "",
       discounted_price: "",
-      professor: "",
-      center: "",
+      professors: [],
+      centers: [],
       categories: [],
       image: "",
       editMode: false,
-      apiUrl: "http://localhost:5000/courses",
+      apiUrl: "${API_URL}/courses",
       apiAction: "post"
     }
 
@@ -35,15 +37,45 @@ export default class CourseForm extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:5000/categories')
+    axios.get(`${API_URL}/categories`)
       .then(response => {
-        console.log(response.data);
         this.setState({
           categories: response.data
         });
       })
       .catch(error => {
-        console.log('Error fetchin categories', error);
+        console.log('Error fetchin categories:', error);
+      });
+    
+    axios
+      .get(`${API_URL}/professors`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then(response => {
+        this.setState({
+          professors: response.data
+        });
+      })
+      .catch(error => {
+        console.log('Error fetchin professors:', 'error');
+      });
+    
+    axios
+      .get(`${API_URL}/studycenters`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then(response => {
+        this.setState({
+          centers: response.data
+        });
+        console.log('centers', this.state.centers);
+      })
+      .catch(error => {
+        console.error('Error al hacer la solicitud:', error);
       });
   }
 
@@ -176,8 +208,8 @@ export default class CourseForm extends Component {
     formData.append("courses_content", this.state.content);
     formData.append("courses_price", this.state.price);
     formData.append("courses_discounted_price", this.state.discounted_price);
-    formData.append("courses_professor_id", this.state.professor);
-    formData.append("courses_studycenter_id", this.state.center);
+    formData.append("courses_professor_id", this.state.professors);
+    formData.append("courses_studycenter_id", this.state.centers);
     formData.append("courses_category_id", this.state.category);
 
     if (this.state.image) {
@@ -192,6 +224,7 @@ export default class CourseForm extends Component {
       <form onSubmit={this.handleSubmit} className="course-form-wrapper">
         <div className="two-column">
           <input
+            className='inputForm'
             type="text"
             name="title"
             placeholder="Course title"
@@ -213,24 +246,35 @@ export default class CourseForm extends Component {
         </div>
 
         <div className="two-column">
-          <input
-            type="text"
+        <select
             name="professor"
-            placeholder="Course professor"
-            value={this.state.professor}
+            value={this.state.professors}
             onChange={this.handleChange}
-          />
-          <input
-            type="text"
+            className="select-element"
+          >
+            {this.state.professors.map(professor => (
+              <option key={professor.professors_id} value={professor.professors_id}>
+                {professor.professors_name}
+              </option>
+            ))}
+          </select>
+          <select
             name="center"
-            placeholder="Course center"
-            value={this.state.professor}
+            value={this.state.centers}
             onChange={this.handleChange}
-          />
+            className="select-element"
+          >
+            {this.state.centers.map(center => (
+              <option key={center.studyCenters_id} value={center.studyCenters_id}>
+                {center.studyCenters_name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="two-column">
           <input
+            className='inputForm'
             type="number"
             name="price"
             placeholder="Course price"
@@ -238,6 +282,7 @@ export default class CourseForm extends Component {
             onChange={this.handleChange}
           />
           <input
+            className='inputForm'
             type="number"
             name="discounted_price"
             placeholder="Course discounted"
