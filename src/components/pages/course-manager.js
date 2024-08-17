@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from "axios";
 
 import CourseSidebarList from '../course/course-sidebar-list';
-import CourseForm from '../course/course-fom';
+import CourseForm from '../course/course-form';
 
 
 export default class CourseManager extends Component {
@@ -10,8 +10,8 @@ export default class CourseManager extends Component {
         super();
     
         this.state = {
-            couseItems: [],
-            corseToEdit: {}
+            courseItems: [],
+            courseToEdit: {}
         };
 
         // this.clearCourseToEdit = this.clearCourseToEdit.bind(this);
@@ -55,7 +55,7 @@ export default class CourseManager extends Component {
         this.getCourseItems();
     }
 
-    
+  */   
     handleNewFormSubmission(courseItem) {
         this.setState({
             courseItems: [courseItem].concat(this.state.courseItems)
@@ -65,13 +65,12 @@ export default class CourseManager extends Component {
     handleFormSubmissionError(error) {
         console.log("handleFormSubmissionError error", error);
     }
- */
+
     getCourseItems() {
         axios
           .get(`http://localhost:5000/courses` 
           )
           .then(response => {
-            console.log(response.data)
             this.setState({
               courseItems: [...response.data]
             });

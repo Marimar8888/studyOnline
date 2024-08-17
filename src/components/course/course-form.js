@@ -17,12 +17,15 @@ export default class CourseForm extends Component {
       content: "",
       price: "",
       discounted_price: "",
+      professor: "",   
+      center: "",      
+      category: "", 
       professors: [],
       centers: [],
       categories: [],
       image: "",
       editMode: false,
-      apiUrl: "${API_URL}/courses",
+      apiUrl: `${API_URL}/course`,
       apiAction: "post"
     }
 
@@ -72,7 +75,6 @@ export default class CourseForm extends Component {
         this.setState({
           centers: response.data
         });
-        console.log('centers', this.state.centers);
       })
       .catch(error => {
         console.error('Error al hacer la solicitud:', error);
@@ -87,9 +89,9 @@ export default class CourseForm extends Component {
         courses_content,
         courses_price,
         courses_discounted_price,
-        courses_professor,
-        courses_studycenter,
-        courses_category,
+        courses_professor_id,
+        courses_studycenter_ud,
+        courses_category_id,
         courses_image
       } = this.props.courseToEdit;
 
@@ -102,11 +104,11 @@ export default class CourseForm extends Component {
         content: courses_content || "",
         price: courses_price || "",
         discounted_price: courses_discounted_price || "",
-        professor: courses_professor || "",
-        center: courses_studycenter || "",
-        category: courses_category || "Programación",
+        professor: courses_professor_id || "",
+        center: courses_studycenter_ud || "",
+        category: courses_category_id || "",
         editMode: true,
-        apiUrl: `http://localhost:5000/course/${courses_id}`,
+        apiUrl: `${API_URL}/course/${courses_id}`,
         apiAction: "patch",
         image: courses_image || ""
       });
@@ -148,19 +150,24 @@ export default class CourseForm extends Component {
     return {
       iconFiletypes: [".jpg", ".png"],
       showFiletypeIcon: true,
-      postUrl: "https://httpbin.org/post"
+      postUrl: this.state.apiUrl
     };
   }
 
   handleChange(event) {
-    this.setState({
+   /*  this.setState({
       [event.target.name]: event.target.value
+    }); */
+    const { name, value } = event.target;
+    console.log(`Setting ${name} to ${value}`);
+    this.setState({
+      [name]: value
     });
   }
 
   handleSubmit(event) {
 
-    /*   axios({
+      axios({
         method: this.state.apiAction,
         url: this.state.apiUrl,
         data: this.buildForm(),
@@ -183,10 +190,10 @@ export default class CourseForm extends Component {
             discounted_price: "",
             professor: "",
             center: "",
-            category: "Programación",
+            category: "",
             image: "",
             editMode: false,
-            apiUrl: "http://localhost:5000/courses",
+            apiUrl: `${API_URL}/course`,
             apiAction: "post"
           });
   
@@ -197,7 +204,6 @@ export default class CourseForm extends Component {
         .catch(error => {
           console.log("course form handleSubmit error", error);
         });
-   */
     event.preventDefault();
   }
 
@@ -208,11 +214,11 @@ export default class CourseForm extends Component {
     formData.append("courses_content", this.state.content);
     formData.append("courses_price", this.state.price);
     formData.append("courses_discounted_price", this.state.discounted_price);
-    formData.append("courses_professor_id", this.state.professors);
-    formData.append("courses_studycenter_id", this.state.centers);
+    formData.append("courses_professor_id", this.state.professor);
+    formData.append("courses_studycenter_id", this.state.center);
     formData.append("courses_category_id", this.state.category);
 
-    if (this.state.image) {
+    if (this.state.image && this.state.image instanceof File) {
       formData.append("courses_image", this.state.image);
     }
 
@@ -237,6 +243,7 @@ export default class CourseForm extends Component {
             onChange={this.handleChange}
             className="select-element"
           >
+            <option value="">Select Category</option> 
             {this.state.categories.map(category => (
               <option key={category.categories_id} value={category.categories_id}>
                 {category.categories_name}
@@ -248,10 +255,11 @@ export default class CourseForm extends Component {
         <div className="two-column">
         <select
             name="professor"
-            value={this.state.professors}
+            value={this.state.professor}
             onChange={this.handleChange}
             className="select-element"
           >
+            <option value="">Select Professor</option> 
             {this.state.professors.map(professor => (
               <option key={professor.professors_id} value={professor.professors_id}>
                 {professor.professors_name}
@@ -260,10 +268,11 @@ export default class CourseForm extends Component {
           </select>
           <select
             name="center"
-            value={this.state.centers}
+            value={this.state.center}
             onChange={this.handleChange}
             className="select-element"
           >
+            <option value="">Select Center</option> 
             {this.state.centers.map(center => (
               <option key={center.studyCenters_id} value={center.studyCenters_id}>
                 {center.studyCenters_name}
