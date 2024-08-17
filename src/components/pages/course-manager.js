@@ -14,19 +14,19 @@ export default class CourseManager extends Component {
             courseToEdit: {}
         };
 
-        // this.clearCourseToEdit = this.clearCourseToEdit.bind(this);
-        this.handleEditClick = this.handleEditClick.bind(this);
-        this.handleDeleteClick = this.handleDeleteClick.bind(this);
-/*         this.handleEditFormSubmission = this.handleEditFormSubmission.bind(this);
+       // this.clearCourseToEdit = this.clearCourseToEdit.bind(this);
+        //this.handleEditClick = this.handleEditClick.bind(this);
+        //this.handleDeleteClick = this.handleDeleteClick.bind(this);
+        this.handleEditFormSubmission = this.handleEditFormSubmission.bind(this);
         this.handleNewFormSubmission = this.handleNewFormSubmission.bind(this);
-        this.handleFormSubmissionError = this.handleFormSubmissionError.bind(this); */
+        //this.handleFormSubmissionError = this.handleFormSubmissionError.bind(this); 
     }
 
-/*     clearCourseToEdit() {
+     clearCourseToEdit() {
         this.setState({
           courseToEdit: {}
         });
-      } */
+      } 
     
     handleEditClick(courseItem) {
         this.setState({
@@ -51,11 +51,10 @@ export default class CourseManager extends Component {
           });
       }
 
-  /*   handleEditFormSubmission() {
+    handleEditFormSubmission() {
         this.getCourseItems();
     }
-
-  */   
+  
     handleNewFormSubmission(courseItem) {
         this.setState({
             courseItems: [courseItem].concat(this.state.courseItems)
@@ -90,11 +89,11 @@ export default class CourseManager extends Component {
             <div className="course-manager-wrapper">
             <div className="left-column">
            <CourseForm
-/*                 handleNewFormSubmission={this.handleNewFormSubmission}
-                handleEditFormSubmission={this.handleEditFormSubmission}
-                handleFormSubmissionError={this.handleFormSubmissionError}
-                clearCourseToEdit={this.clearCourseToEdit}
-                courseToEdit={this.state.courseToEdit} */
+              handleNewFormSubmission={this.handleNewFormSubmission}
+              //handleEditFormSubmission={this.handleEditFormSubmission}
+             // handleFormSubmissionError={this.handleFormSubmissionError}
+              //clearCourseToEdit={this.clearCourseToEdit}
+              //courseToEdit={this.state.courseToEdit} 
               /> 
             </div>
            

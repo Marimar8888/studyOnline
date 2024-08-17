@@ -17,9 +17,9 @@ export default class CourseForm extends Component {
       content: "",
       price: "",
       discounted_price: "",
-      professor: "",   
-      center: "",      
-      category: "", 
+      professor: "",
+      center: "",
+      category: "",
       professors: [],
       centers: [],
       categories: [],
@@ -49,7 +49,7 @@ export default class CourseForm extends Component {
       .catch(error => {
         console.log('Error fetchin categories:', error);
       });
-    
+
     axios
       .get(`${API_URL}/professors`, {
         headers: {
@@ -64,7 +64,7 @@ export default class CourseForm extends Component {
       .catch(error => {
         console.log('Error fetchin professors:', 'error');
       });
-    
+
     axios
       .get(`${API_URL}/studycenters`, {
         headers: {
@@ -155,55 +155,48 @@ export default class CourseForm extends Component {
   }
 
   handleChange(event) {
-   /*  this.setState({
-      [event.target.name]: event.target.value
-    }); */
-    const { name, value } = event.target;
-    console.log(`Setting ${name} to ${value}`);
     this.setState({
-      [name]: value
+      [event.target.name]: event.target.value
     });
   }
 
   handleSubmit(event) {
+    axios({
+      method: this.state.apiAction,
+      url: this.state.apiUrl,
+      data: this.buildForm(),
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+      .then(response => {
+        if (this.state.editMode) {
+          this.props.handleEditFormSubmission();
+        } else {
+          this.props.handleNewFormSubmission(response.data);
+        }
 
-      axios({
-        method: this.state.apiAction,
-        url: this.state.apiUrl,
-        data: this.buildForm(),
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        this.setState({
+          title: "",
+          content: "",
+          price: "",
+          discounted_price: "",
+          professor: "",
+          center: "",
+          category: "",
+          image: "",
+          editMode: false,
+          apiUrl: `${API_URL}/course`,
+          apiAction: "post"
+        });
+
+        if (this.imgRef.current) {
+          this.imgRef.current.dropzone.removeAllFiles();
         }
       })
-        .then(response => {
-          console.log(response);
-          if (this.state.editMode) {
-            this.props.handleEditFormSubmission();
-          } else {
-            this.props.handleNewFormSubmission(response.data);
-          }
-  
-          this.setState({
-            title: "",
-            content: "",
-            price: "",
-            discounted_price: "",
-            professor: "",
-            center: "",
-            category: "",
-            image: "",
-            editMode: false,
-            apiUrl: `${API_URL}/course`,
-            apiAction: "post"
-          });
-  
-          if (this.imgRef.current) {
-            this.imgRef.current.dropzone.removeAllFiles();
-          }
-        })
-        .catch(error => {
-          console.log("course form handleSubmit error", error);
-        });
+      .catch(error => {
+        console.log("course form handleSubmit error", error);
+      });
     event.preventDefault();
   }
 
@@ -213,10 +206,16 @@ export default class CourseForm extends Component {
     formData.append("courses_title", this.state.title);
     formData.append("courses_content", this.state.content);
     formData.append("courses_price", this.state.price);
-    formData.append("courses_discounted_price", this.state.discounted_price);
     formData.append("courses_professor_id", this.state.professor);
-    formData.append("courses_studycenter_id", this.state.center);
     formData.append("courses_category_id", this.state.category);
+
+    if (this.state.discounted_price) {
+      formData.append("courses_discounted_price", this.state.discounted_price);
+    }
+
+    if (this.state.center) {
+      formData.append("courses_studycenter_id", this.state.center);
+    }
 
     if (this.state.image && this.state.image instanceof File) {
       formData.append("courses_image", this.state.image);
@@ -243,7 +242,7 @@ export default class CourseForm extends Component {
             onChange={this.handleChange}
             className="select-element"
           >
-            <option value="">Select Category</option> 
+            <option value="">Select Category</option>
             {this.state.categories.map(category => (
               <option key={category.categories_id} value={category.categories_id}>
                 {category.categories_name}
@@ -253,13 +252,13 @@ export default class CourseForm extends Component {
         </div>
 
         <div className="two-column">
-        <select
+          <select
             name="professor"
             value={this.state.professor}
             onChange={this.handleChange}
             className="select-element"
           >
-            <option value="">Select Professor</option> 
+            <option value="">Select Professor</option>
             {this.state.professors.map(professor => (
               <option key={professor.professors_id} value={professor.professors_id}>
                 {professor.professors_name}
@@ -272,7 +271,7 @@ export default class CourseForm extends Component {
             onChange={this.handleChange}
             className="select-element"
           >
-            <option value="">Select Center</option> 
+            <option value="">Select Center</option>
             {this.state.centers.map(center => (
               <option key={center.studyCenters_id} value={center.studyCenters_id}>
                 {center.studyCenters_name}
