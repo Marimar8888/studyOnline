@@ -142,7 +142,9 @@ export default class CourseForm extends Component {
   djsConfig() {
     return {
       addRemoveLinks: true,
-      maxFiles: 1
+      maxFiles: 1,
+      acceptedFiles: 'image/*',
+      autoProcessQueue: false
     };
   }
 
@@ -161,6 +163,7 @@ export default class CourseForm extends Component {
   }
 
   handleSubmit(event) {
+    event.preventDefault(); 
     axios({
       method: this.state.apiAction,
       url: this.state.apiUrl,
@@ -184,7 +187,7 @@ export default class CourseForm extends Component {
           professor: "",
           center: "",
           category: "",
-          image: "",
+          image: null,
           editMode: false,
           apiUrl: `${API_URL}/course`,
           apiAction: "post"
@@ -197,7 +200,7 @@ export default class CourseForm extends Component {
       .catch(error => {
         console.log("course form handleSubmit error", error);
       });
-    event.preventDefault();
+
   }
 
   buildForm() {
@@ -218,7 +221,7 @@ export default class CourseForm extends Component {
     }
 
     if (this.state.image && this.state.image instanceof File) {
-      formData.append("courses_image", this.state.image);
+      formData.append("file", this.state.image);
     }
 
     return formData;
@@ -310,9 +313,9 @@ export default class CourseForm extends Component {
         </div>
 
         <div className="image-uploaders">
-          {this.state.thumb_image_url && this.state.editMode ? (
+          {this.state.image && this.state.editMode ? (
             <div className="portfolio-manager-image-wrapper">
-              <img src={this.state.thumb_image_url} />
+              <img src={this.state.image} />
 
               <div className="image-removal-link">
                 <a onClick={() => this.deleteImage("thumb_image")}>
