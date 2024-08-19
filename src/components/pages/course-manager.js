@@ -73,6 +73,7 @@ export default class CourseManager extends Component {
             this.setState({
               courseItems: [...response.data]
             });
+            console.log(this.state.courseItems);
           })
           .catch(error => {
             console.log("error in getCourseItems", error);

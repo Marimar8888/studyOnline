@@ -11,7 +11,7 @@ const CourseSidebarList = props => {
     return (
     <div key={courseItem.courses_id} className="course-item">
         <div className="course-img">
-          {/* <img src={courseItem.courses_image} /> */}
+      <img src={courseItem.courses_image} />
 
         </div>
 
