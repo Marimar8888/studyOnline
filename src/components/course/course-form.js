@@ -317,7 +317,7 @@ export default class CourseForm extends Component {
 
           <div className="image-uploaders">
             {this.state.image && this.state.editMode ? (
-              <div className="portfolio-manager-image-wrapper">
+              <div className="course-manager-image-wrapper">
                 <img src={this.state.image} />
 
                 <div className="image-removal-link">
