@@ -15,8 +15,8 @@ export default class CourseManager extends Component {
       courseToEdit: {}
     };
 
-    // this.clearCourseToEdit = this.clearCourseToEdit.bind(this);
-    //this.handleEditClick = this.handleEditClick.bind(this);
+    this.clearCourseToEdit = this.clearCourseToEdit.bind(this);
+    this.handleEditClick = this.handleEditClick.bind(this);
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
     this.handleEditFormSubmission = this.handleEditFormSubmission.bind(this);
     this.handleNewFormSubmission = this.handleNewFormSubmission.bind(this);
@@ -36,18 +36,13 @@ export default class CourseManager extends Component {
   }
 
   handleDeleteClick(courseItem) {
-    const url = `${API_URL}/course/${courseItem.courses_id}`;
-    const headers = {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-    };
-
-    console.log("DELETE URL:", url);
-    console.log("Headers:", headers);
-
     axios
-        .delete(url, { headers })
+        .delete(`${API_URL}/course/${courseItem.courses_id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
         .then(response => {
-            console.log("Delete successful:", response);
             this.setState({
                 courseItems: this.state.courseItems.filter(item => {
                     return item.courses_id !== courseItem.courses_id;
@@ -56,38 +51,8 @@ export default class CourseManager extends Component {
         })
         .catch(error => {
             console.error("handleDeleteClick error", error);
-            if (error.response) {
-                console.error("Error response data:", error.response.data);
-                console.error("Error response status:", error.response.status);
-                console.error("Error response headers:", error.response.headers);
-            } else if (error.request) {
-                console.error("Error request:", error.request);
-            } else {
-                console.error("Error message:", error.message);
-            }
         });
-}
-
-  /* handleDeleteClick(courseItem) {
-    axios
-      .delete(`${API_URL}/course/${courseItem.courses_id}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-      .then(response => {
-        this.setState({
-          courseItems: this.state.courseItems.filter(item => {
-            return item.courses_id !== courseItem.courses_id;
-          })
-        });
-
-        return response.data;
-      })
-      .catch(error => {
-        console.log("handleDeleteClick error", error);
-      });
-  } */
+  }
 
   handleEditFormSubmission() {
     this.getCourseItems();
@@ -111,7 +76,6 @@ export default class CourseManager extends Component {
         this.setState({
           courseItems: [...response.data]
         });
-        console.log(this.state.courseItems);
       })
       .catch(error => {
         console.log("error in getCourseItems", error);
@@ -131,8 +95,8 @@ export default class CourseManager extends Component {
             handleNewFormSubmission={this.handleNewFormSubmission}
           //handleEditFormSubmission={this.handleEditFormSubmission}
           // handleFormSubmissionError={this.handleFormSubmissionError}
-          //clearCourseToEdit={this.clearCourseToEdit}
-          //courseToEdit={this.state.courseToEdit} 
+            clearCourseToEdit={this.clearCourseToEdit}
+            courseToEdit={this.state.courseToEdit} 
           />
         </div>
 
