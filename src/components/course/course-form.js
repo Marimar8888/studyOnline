@@ -157,8 +157,11 @@ export default class CourseForm extends Component {
 
   handleImageDrop() {
     return {
+      // addedfile: file => {
+      //   this.setState({ image: URL.createObjectURL(file) });
+      // }
       addedfile: file => {
-        this.setState({ image: URL.createObjectURL(file) });
+        this.setState({ image: file });
       }
     };
   }
@@ -247,7 +250,7 @@ export default class CourseForm extends Component {
     if (this.state.image && this.state.image instanceof File) {
       formData.append("file", this.state.image);
     }
-
+    
     return formData;
   }
 
