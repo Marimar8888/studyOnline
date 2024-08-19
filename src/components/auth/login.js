@@ -54,6 +54,7 @@ export default class Login extends Component {
         if (response.status === 200) {
           if (this.isMountedComponent) {
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user_name', response.data.user_name);
             this.props.handleSuccessfulAuth();
           }
         } else {

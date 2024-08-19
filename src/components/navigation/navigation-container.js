@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router";
 import { NavLink } from "react-router-dom";
@@ -20,9 +19,12 @@ const NavigationComponent = (props) => {
   };
   const handleSignOut = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user_name'); 
     props.history.push("/");
     props.handleSuccessfulLogout();
   };
+
+  const userName = localStorage.getItem('user_name');
 
   return (
     <div className="nav-wrapper">
@@ -48,7 +50,7 @@ const NavigationComponent = (props) => {
         {false ? <button>Add Blog</button> : null}
       </div>
       <div className="right-side">
-        MARIA DEL MAR ALONSO
+        {userName ? userName : ""}
         {props.loggedInStatus === "LOGGED_IN" ? (
           <a onClick={handleSignOut}>
             <FontAwesomeIcon icon="sign-out-alt" />
