@@ -37,9 +37,19 @@ export default class CourseForm extends Component {
     this.deleteImage = this.deleteImage.bind(this);
 
     this.imgRef = React.createRef();
+    this._isMounted = false;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+
+    if (this.imgRef.current) {
+      this.imgRef.current.dropzone.removeAllFiles();
+    }
   }
 
   componentDidMount() {
+    this._isMounted = true;
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -53,24 +63,26 @@ export default class CourseForm extends Component {
       }
     })
       .then(response => {
-        this.fetchCategories();
-        const userId = response.data.users_id;
-        return axios
-          .get(`${API_URL}/professor/${userId}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
+        if (this._isMounted) {
+          this.fetchCategories();
+          const userId = response.data.users_id;
+          return axios
+            .get(`${API_URL}/professor/${userId}`, {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+        }
       })
       .then(response => {
-        const professorData = response.data;
-        this.setState({
-          professors: [professorData.professor],
-          courses: professorData.courses,
-          studyCenters: professorData.study_centers,
-          professorId: professorData.professor.professor_id
-        });
-        console.log('Profesor y datos asociados:', professorData);
+        if (this._isMounted && response) {
+          const professorData = response.data;
+          this.setState({
+            professors: [professorData.professor],
+            studyCenters: professorData.study_centers,
+            professorId: professorData.professor.professor_id
+          });
+        }
       })
       .catch(error => {
         console.error('Error al obtener los datos de professor:', error);
@@ -80,22 +92,20 @@ export default class CourseForm extends Component {
   fetchCategories() {
     axios.get(`${API_URL}/categories`)
       .then(response => {
-        const sortedCategories = response.data.sort((a, b) => a.categories_id - b.categories_id);
-        this.setState({
-          categories: sortedCategories
-        });
+        if (this._isMounted) {
+          const sortedCategories = response.data.sort((a, b) => a.categories_id - b.categories_id);
+          this.setState({
+            categories: sortedCategories
+          });
+        }
       })
       .catch(error => {
         console.error('Error al obtener las categorías:', error);
       });
   }
 
-
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.courseToEdit && Object.keys(this.props.courseToEdit).length > 0 &&
-      prevProps.courseToEdit !== this.props.courseToEdit
-    ) {
+  componentDidUpdate() {
+    if (Object.keys(this.props.courseToEdit).length > 0) {
       const {
         courses_id,
         courses_title,
@@ -107,6 +117,8 @@ export default class CourseForm extends Component {
         category,
         courses_image
       } = this.props.courseToEdit;
+
+      this.props.clearCourseToEdit();
 
       this.setState({
         id: courses_id,
@@ -121,14 +133,12 @@ export default class CourseForm extends Component {
         editMode: true,
         apiUrl: `${API_URL}/course/${courses_id}`,
         apiAction: "patch",
-        image: courses_image || ""
+        image: courses_image ? courses_image : null
       });
 
       if (this.imgRef.current) {
         this.imgRef.current.dropzone.removeAllFiles();
       }
-
-      this.props.clearCourseToEdit();
     }
   }
 
@@ -146,13 +156,14 @@ export default class CourseForm extends Component {
         }
       )
       .then(response => {
-        if (response) {
+         if (this._isMounted && response) {
           this.setState({
             image: null
           });
           this.props.handleEditFormSubmission();
         }
-      })
+       }
+      )
       .catch(error => {
         console.log("deleteImage error", error);
       });
@@ -160,18 +171,32 @@ export default class CourseForm extends Component {
 
   handleImageDrop() {
     return {
-      addedfile: file => {
-        this.setState({ image: file });
-      }
+        addedfile: file => {
+          if (this.isMounted) {
+            this.setState({ 
+                image: file,
+                apiAction: "patch",  
+            });
+
+            if (this.imgRef.current) {
+                this.imgRef.current.dropzone.removeAllFiles();  
+                this.imgRef.current.dropzone.addFile(file);  
+            }
+          }
+        }
     };
-  }
+}
+
+  // handleImageDrop() {
+  //   return {
+  //     addedfile: file => this.setState({ image: file })
+  //   };
+  // }
 
   djsConfig() {
     return {
       addRemoveLinks: true,
-      maxFiles: 1,
-      acceptedFiles: 'image/*',
-      autoProcessQueue: false
+      maxFiles: 1
     };
   }
 
@@ -181,53 +206,6 @@ export default class CourseForm extends Component {
       showFiletypeIcon: true,
       postUrl: this.state.apiUrl
     };
-  }
-
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    axios({
-      method: this.state.apiAction,
-      url: this.state.apiUrl,
-      data: this.buildForm(),
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-      .then(response => {
-        if (this.state.editMode) {
-          this.props.handleEditFormSubmission();
-        } else {
-          this.props.handleNewFormSubmission(response.data);
-        }
-
-        this.setState({
-          title: "",
-          content: "",
-          price: "",
-          discounted_price: "",
-          professorId: "",
-          center: "",
-          category: "",
-          image: null,
-          editMode: false,
-          apiUrl: `${API_URL}/course`,
-          apiAction: "post"
-        });
-
-        if (this.imgRef.current) {
-          this.imgRef.current.dropzone.removeAllFiles();
-        }
-      })
-      .catch(error => {
-        console.log("course form handleSubmit error", error);
-      });
-
   }
 
   buildForm() {
@@ -252,6 +230,56 @@ export default class CourseForm extends Component {
     }
 
     return formData;
+  }
+
+  handleChange(event) {
+
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+
+  }
+
+  handleSubmit(event) {
+    axios({
+      method: this.state.apiAction,
+      url: this.state.apiUrl,
+      data: this.buildForm(),
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+      .then(response => {
+
+        if (this.state.editMode) {
+          this.props.handleEditFormSubmission();
+        } else {
+          this.props.handleNewFormSubmission(response.data);
+        }
+
+        this.setState({
+          title: "",
+          content: "",
+          price: "",
+          discounted_price: "",
+          professorId: "",
+          center: "",
+          category: "",
+          image: null,
+          editMode: false,
+          apiUrl: `${API_URL}/course`,
+          apiAction: "post"
+        });
+
+        if (this.imgRef.current) {
+          this.imgRef.current.dropzone.removeAllFiles();
+        }
+
+      })
+      .catch(error => {
+        console.log("course form handleSubmit error", error);
+      });
+    event.preventDefault();
   }
 
   render() {
